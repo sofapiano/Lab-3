@@ -27,11 +27,11 @@ def generate(code):
         unit1 += rand.choice(ALPHABET)
         unit2 += rand.choice(ALPHABET)
 
-    key = f'{unit1}-{unit2}-{unit3}'
+    key = f'{unit1}-{unit2} {unit3}'
 
     return key
 
 
-print(generate(input()))    
+# print(generate(input()))    
 '''1 и 2 блок должны содержать 4,5,6 и 1,2,3 цифры введенного числа соответственно, остальное - случайные буквы, 3 блок - результат сложения 
 чисел, получившихся в 1 и 2 блоках. Пример: ввод «726911» -> 276DL-191GO-0467'''
