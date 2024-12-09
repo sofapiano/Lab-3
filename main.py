@@ -1,23 +1,14 @@
 import tkinter as tk
 from generator import generate
 from pygame import mixer
-from PIL import Image, ImageTk
 
 
-MSG_HEIGHT = 4
 WELCOME_TEXT = 'welcome to the definitely not-piracy keygen'
-keys_lbls = []
-
 
 def init_gui():
     root = tk.Tk()
-
-    bg = tk.PhotoImage(file='civ-VI.png')
-    canvas1 = tk.Canvas(root, width=600,
-                        height=900)
-    canvas1.pack(fill='both', expand=True)
-    canvas1.create_image(0, 0, image=bg,
-                         anchor='nw')
+    root.geometry("639x361")
+    root.title("definitely not a piracy app")
 
     mixer.init() 
     mixer.music.load("megalovania.mp3") 
@@ -25,24 +16,33 @@ def init_gui():
     return root
 
 
-def init_frames(root):
-    fr_code_input = tk.Frame(root)
-    fr_key_output = tk.Frame(root)
-    fr_code_input.pack(fill=tk.X, side=tk.BOTTOM)
-    fr_key_output.pack(fill=tk.BOTH, expand=True)
-
-    lbl_greet = tk.Label(fr_key_output, text=WELCOME_TEXT, height=MSG_HEIGHT)
-    lbl_greet.pack(side=tk.TOP)
-
-    lbl_key = output_key(fr_key_output)
-
-    return fr_code_input, fr_key_output, lbl_key
+def init_canvas(root):
+    bg_image = tk.PhotoImage(file="image.png")
+    canvas = tk.Canvas(root, width=639, height=361)
+    canvas.pack(fill="both", expand=True)
+    canvas.create_image(0, 0, image=bg_image, anchor="nw")
+    canvas.bg_image = bg_image
+    return canvas
 
 
-def init_input(fr_input, label):
-    code_entry = tk.Entry(fr_input)
-    lbl_input = tk.Label(text="input 6-digit decimal number", 
-                         height=MSG_HEIGHT)
+def init_frames(canvas):
+    lbl_greet = tk.Label(canvas, 
+                        text=WELCOME_TEXT,
+                        font= ("Roboto", 12), 
+                        bg="#85Baa1")
+    canvas.create_window(165, 25, window=lbl_greet)
+
+    lbl_key = output_key(canvas)
+
+    return lbl_key
+
+
+def init_input(label, canvas):
+    code_entry = tk.Entry(canvas,
+                          font=("Roboto", 12))
+    lbl_input = tk.Label(text="input 6-digit decimal number",
+                         font= ("Roboto", 12),
+                         background='#85Baa1')
 
     def click(code_entry):
         code = code_entry.get()
@@ -50,31 +50,36 @@ def init_input(fr_input, label):
         label['text'] = key
 
 
-    btn_generate = tk.Button(fr_input, 
+    btn_generate = tk.Button(canvas, 
                              text="get key", 
-                             command=lambda:click(code_entry))
+                             command=lambda:click(code_entry),
+                             font=("Roboto", 12),
+                             background='#85Baa1')
     
     code_entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
-    btn_generate.pack(side=tk.LEFT)
-    lbl_input.pack(side=tk.LEFT)
+    canvas.create_window(110, 315, window=lbl_input)
+    canvas.create_window(100, 340, window=code_entry)
+    canvas.create_window(250, 340, window=btn_generate)
 
 
-def output_key(fr_key_output):
-    lbl_key = tk.Label(fr_key_output, 
-                       text='XXXXX-XXXXX XXXX',
-                       height=MSG_HEIGHT, 
-                       background='#85Baa1')
-    lbl_key.pack(side=tk.TOP, 
-                 anchor="center",
-                 padx=4,
-                 pady=4)
+def output_key(canvas):
+    lbl_key = tk.Label(canvas, 
+                       text='XXXXX-XXXXX XXXX', 
+                       background='#85Baa1',
+                       font= ("Roboto", 20))
+    canvas.create_window(250, 250, window=lbl_key)
 
     return lbl_key  
 
 
 if __name__ == '__main__':
     root = init_gui()
-    # fr_code_input, fr_key_output, key_lbl = init_frames(root)
+    canvas = init_canvas(root)
 
-    # init_input(fr_code_input, key_lbl)
+    key_lbl = init_frames(canvas)
+
+    init_input(key_lbl, canvas)
+
+    
+
     root.mainloop()
